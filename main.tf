@@ -146,7 +146,7 @@ resource "nat_gateway" "main" {
         {
             Name = "${local.resource_name}-nat_gw"
         }
-        depends_on = [aws_internet_gateway.main] #depends on internet_gateway, not with its id
+    depends_on = [aws_internet_gateway.main] #depends on internet_gateway, not with its id
     )
 }
 #creating routes:
@@ -163,8 +163,8 @@ resource "aws_route" "private" {
     nat_gateway_id = aws_nat_gateway.main.id
 }
 
-resource "aws_route" "public" {
-    route_table_id = aws_route_table.public.id
+resource "aws_route" "database" {
+    route_table_id = aws_route_table.database.id
     destination_cidr_block = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.main.id
 }

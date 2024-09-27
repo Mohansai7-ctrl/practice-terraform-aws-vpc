@@ -15,7 +15,7 @@ output "database_subnet_id" {
 }
 
 output "az_info" {
-    default = aws_availability_zones.available
+    value = aws_availability_zones.available
 }
 
 output "default_vpc_info" {
@@ -24,5 +24,5 @@ output "default_vpc_info" {
 
 output "default_vpc_route_table_info" {
     value = data.aws_route_table.default #will provide all default vpc route_tables info
-    
+
 }
