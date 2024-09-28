@@ -74,7 +74,7 @@ resource "aws_subnet" "database" {
     )
 }
 
-resource "aws_db_subnet_group" "main" {
+resource "aws_db_subnet_group" "main" {  #This subnet_ids of database will be formed as group in aws service RDS
     name = local.resource_name 
     subnet_ids = aws_subnet.database[*].id
     tags = merge(

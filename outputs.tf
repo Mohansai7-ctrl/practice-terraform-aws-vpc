@@ -1,6 +1,7 @@
-output "vpc_info" {  
-    value = aws_vpc.main.id #here value names same as reference_type.reference_name and this can be different from output name
+output "vpc_id" {  
+    value = aws_vpc.main.id #here value names same as reference_type.reference_name and this can be different from output name and we get these output value names in readme.MD File from developer , id == attribute reference
 }
+
 
 output "public_subnet_ids" {
     value = aws_subnet.public[*].id
