@@ -136,7 +136,7 @@ resource "aws_eip" "main" {
 }
 
 #creating nat gateway and associating it with elastic ip:
-resource "nat_gateway" "main" {
+resource "aws_nat_gateway" "main" {
     subnet_id = aws_subnet.public[0].id
     allocation_id = aws_eip.main.id
 

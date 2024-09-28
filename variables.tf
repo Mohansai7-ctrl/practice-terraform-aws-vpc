@@ -88,3 +88,7 @@ variable "is_peering_required" {
 variable "peering_tags" {
     default = {}
 }
+
+variable "nat_gateway_tags" {
+    default = {}
+}
