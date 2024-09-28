@@ -16,7 +16,7 @@ resource "aws_vpc" "main" {
 #creating internet_gateway and associating with vpc:
 
 resource "aws_internet_gateway" "main" {
-    vpc_id = aws_vpc.main.vpc_id
+    vpc_id = aws_vpc.main.id
 
     tags = merge(
         var.common_tags,
@@ -33,7 +33,7 @@ resource "aws_subnet" "public" {
     count = length(var.public_subnet_cidrs)
     vpc_id = aws_vpc.main.id
     cidr_block = var.public_subnet_cidrs[count.index]
-    availability_zones = local.az_names[count.index]
+    availability_zone = local.az_names[count.index]
 
     tags = merge(
         var.common_tags,
@@ -48,7 +48,7 @@ resource "aws_subnet" "private" {
     count = length(var.private_subnet_cidrs)
     vpc_id = aws_vpc.main.id
     cidr_block = var.private_subnet_cidrs[count.index]
-    availability_zones = local.az_names[count.index]
+    availability_zone = local.az_names[count.index]
 
     tags = merge(
         var.common_tags,
@@ -63,7 +63,7 @@ resource "aws_subnet" "database" {
     count = length(var.database_subnet_cidrs)
     vpc_id = aws_vpc.main.id
     cidr_block = var.database_subnet_cidrs[count.index]
-    availability_zones = local.az_names[count.index]
+    availability_zone = local.az_names[count.index]
 
     tags = merge(
         var.common_tags,
@@ -153,19 +153,19 @@ resource "aws_nat_gateway" "main" {
 #creating routes:
 
 resource "aws_route" "public" {
-    route_table_id = aws_route_table.public.id
+    route_table_id = aws_route_table.public_route_table.id
     destination_cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.main.id
 }
 
 resource "aws_route" "private" {
-    route_table_id = aws_route_table.private.id
+    route_table_id = aws_route_table.private_route_table.id
     destination_cidr_block = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.main.id
 }
 
 resource "aws_route" "database" {
-    route_table_id = aws_route_table.database.id
+    route_table_id = aws_route_table.database_route_table.id
     destination_cidr_block = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.main.id
 }
@@ -175,19 +175,19 @@ resource "aws_route" "database" {
 resource "aws_route_table_association" "public" {
     count = length(var.public_subnet_cidrs)
     subnet_id = aws_subnet.public[count.index].id
-    route_table_id = aws_route_table.public.id
+    route_table_id = aws_route_table.public_route_table.id
 
 }
 
 resource "aws_route_table_association" "private" {
     count = length(var.private_subnet_cidrs)
     subnet_id = aws_subnet.private[count.index].id
-    route_table_id = aws_route_table.private.id
+    route_table_id = aws_route_table.private_route_table.id
 }
 
 resource "aws_route_table_association" "database" {
     count = length(var.database_subnet_cidrs)
-    route_table_id = aws_route_table.database.id
+    route_table_id = aws_route_table.database_route_table.id
     subnet_id = aws_subnet.database[count.index].id  #becuase it should route with 2 public subnets which are in 2 regions
 
 }
