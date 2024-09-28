@@ -144,10 +144,11 @@ resource "nat_gateway" "main" {
         var.common_tags,
         var.nat_gateway_tags,
         {
-            Name = "${local.resource_name}-nat_gw"
+            Name = local.resource_name
         }
-    depends_on = [aws_internet_gateway.main] #depends on internet_gateway, not with its id
+    
     )
+    depends_on = [aws_internet_gateway.main] #depends on internet_gateway, not with its id
 }
 #creating routes:
 
